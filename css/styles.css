@@ -441,3 +441,152 @@ a:hover {
 
   .data-table tfoot td[colspan="2"] { display: none; }
 }
+
+/* ---------- Форма ---------- */
+.form {
+  padding: 1.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.form__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.field--wide {
+  flex-basis: 100%;
+}
+
+.field label,
+.field legend {
+  font-weight: 600;
+}
+
+.field input[type="text"],
+.field input[type="email"],
+.field input[type="tel"],
+.field input[type="number"],
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  font: inherit;
+  color: inherit;
+  background: #fff;
+  border: 1px solid #b9bfd0;
+  border-radius: 10px;
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.field input:focus-visible,
+.field select:focus-visible,
+.field textarea:focus-visible {
+  outline-offset: 0;
+  border-color: var(--color-accent);
+}
+
+.field__hint {
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+}
+
+/* Сообщение об ошибке скрыто, пока пользователь не ввёл неверное значение */
+.field__error {
+  display: none;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-error);
+}
+
+.field:has(:user-invalid) .field__error {
+  display: block;
+}
+
+.field:has(:user-invalid) .field__hint {
+  display: none;
+}
+
+.field input:user-invalid,
+.field select:user-invalid,
+.field textarea:user-invalid {
+  border-color: var(--color-error);
+  background: #fff7f6;
+}
+
+.field--fieldset {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.field .choice {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 400;
+}
+
+.choice input {
+  flex: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  accent-color: var(--color-accent);
+}
+
+.form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.button--ghost {
+  color: var(--color-accent-dark);
+  background: transparent;
+  border: 1px solid var(--color-accent);
+}
+
+.button--ghost:hover {
+  color: var(--color-accent-dark);
+  background: var(--color-accent-soft);
+}
+
+/* Сообщение об успехе показывается через :target (без JavaScript) */
+.notice {
+  display: none;
+  margin-bottom: 1.25rem;
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  color: var(--color-ok);
+  background: var(--color-ok-soft);
+  border-radius: 12px;
+}
+
+.notice:target {
+  display: block;
+}
+
+@media (max-width: 720px) {
+  .form {
+    padding: 1rem;
+  }
+
+  .form__actions .button {
+    flex: 1 1 100%;
+    text-align: center;
+  }
+}
