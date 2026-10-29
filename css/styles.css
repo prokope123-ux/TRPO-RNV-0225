@@ -1,0 +1,337 @@
+/* ==========================================================
+   Практическая работа №1. Базовые стили
+   Порядок: переменные → сброс → типографика → компоненты
+   ========================================================== */
+
+:root {
+  --color-bg: #f4f5fa;
+  --color-surface: #ffffff;
+  --color-text: #1f2937;
+  --color-muted: #5b6472;
+  --color-dark: #111827;
+  --color-accent: #2f54eb;
+  --color-accent-dark: #1d3fc4;
+  --color-accent-soft: #e8edff;
+  --color-border: #e2e4ec;
+  --color-ok: #137a4b;
+  --color-ok-soft: #dcf5e8;
+  --color-warn: #8a5a00;
+  --color-warn-soft: #fff0cc;
+  --color-error: #b42318;
+  --radius: 16px;
+  --container: 70rem;
+}
+
+/* ---------- Сброс и база ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+h1, h2, h3 {
+  line-height: 1.25;
+  color: var(--color-dark);
+}
+
+p { margin: 0 0 1rem; }
+
+/* ---------- Ссылки и фокус ---------- */
+a {
+  color: var(--color-accent);
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  color: var(--color-accent-dark);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 20;
+  padding: 0.6rem 1rem;
+  background: var(--color-surface);
+  border-radius: 8px;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* ---------- Контейнер и секции ---------- */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+.section {
+  padding-block: 3rem;
+  scroll-margin-top: 5rem;
+}
+
+.section__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.75rem;
+}
+
+.section__lead {
+  margin-bottom: 1.5rem;
+  color: var(--color-muted);
+}
+
+/* ---------- Шапка и навигация (Flexbox) ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--color-dark);
+  color: #fff;
+}
+
+.site-header__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding-block: 0.75rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.brand:hover { color: #fff; }
+
+.brand__logo {
+  flex: none;
+  width: auto;
+  height: 2.25rem;
+  border-radius: 6px;
+}
+
+.main-nav__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.main-nav__link {
+  display: inline-block;
+  padding: 0.35rem 0.1rem;
+  color: #d7dcea;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+
+.main-nav__link:hover,
+.main-nav__link:focus-visible {
+  color: #fff;
+  border-bottom-color: var(--color-accent);
+}
+
+.site-header :focus-visible {
+  outline-color: #9db4ff;
+}
+
+/* ---------- Первый экран ---------- */
+.hero__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2rem;
+}
+
+.hero__text {
+  flex: 1 1 22rem;
+}
+
+.hero__text h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+.hero__image {
+  flex: 1 1 18rem;
+  min-width: 0;
+  max-width: 30rem;
+  border-radius: var(--radius);
+}
+
+.lead {
+  font-size: 1.125rem;
+  color: var(--color-muted);
+}
+
+.badge {
+  display: inline-block;
+  margin-bottom: 1rem;
+  padding: 0.2rem 0.85rem;
+  font-size: 0.875rem;
+  color: var(--color-accent-dark);
+  background: var(--color-accent-soft);
+  border-radius: 999px;
+}
+
+.button {
+  display: inline-block;
+  padding: 0.75rem 1.4rem;
+  font: inherit;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  background: var(--color-accent);
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.button:hover {
+  color: #fff;
+  background: var(--color-accent-dark);
+}
+
+/* ---------- Карточки (Flexbox) ---------- */
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 17rem;
+  padding: 1.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.card__category {
+  margin-bottom: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.card__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+}
+
+.card__text {
+  flex: 1 1 auto;
+  color: var(--color-muted);
+}
+
+.card__value {
+  margin: 0;
+}
+
+.card__value label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.card__value strong {
+  color: var(--color-text);
+}
+
+.card__meter {
+  width: 100%;
+  height: 0.9rem;
+}
+
+/* Пустое состояние: если карточек нет, выводится сообщение */
+.cards:not(:has(.card))::before {
+  content: "Данные не найдены: проверьте файл data/content.csv";
+  flex: 1 1 100%;
+  padding: 2rem;
+  text-align: center;
+  color: var(--color-muted);
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius);
+}
+
+/* ---------- Подвал ---------- */
+.site-footer {
+  margin-top: 2rem;
+  padding-block: 2rem;
+  color: #c9cfdf;
+  background: var(--color-dark);
+}
+
+.site-footer__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+.site-footer p:last-child { margin-bottom: 0; }
+
+.site-footer :focus-visible {
+  outline-color: #9db4ff;
+}
+
+/* ---------- Мобильные устройства ---------- */
+@media (max-width: 720px) {
+  .site-header__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .section {
+    padding-block: 2rem;
+  }
+
+  .hero__image {
+    order: -1;
+  }
+}
