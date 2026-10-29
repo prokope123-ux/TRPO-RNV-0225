@@ -1,0 +1,18 @@
+# Редакторы и IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# Системные файлы
+.DS_Store
+Thumbs.db
+
+# Зависимости и сборка (для следующих работ)
+node_modules/
+dist/
+vendor/
+
+# Локальные файлы
+*.log
+.env
