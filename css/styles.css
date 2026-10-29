@@ -335,3 +335,109 @@ a:hover {
     order: -1;
   }
 }
+
+/* ---------- Таблица ---------- */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.85rem 1.1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.data-table thead th {
+  font-size: 0.875rem;
+  color: var(--color-muted);
+  background: #fafbff;
+}
+
+.data-table tbody tr:hover {
+  background: #f7f8ff;
+}
+
+.data-table tfoot th,
+.data-table tfoot td {
+  font-weight: 700;
+  border-bottom: 0;
+}
+
+.data-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* На узком экране строки таблицы превращаются в блоки */
+@media (max-width: 720px) {
+  .data-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .data-table,
+  .data-table tbody,
+  .data-table tfoot,
+  .data-table tr,
+  .data-table th,
+  .data-table td {
+    display: block;
+  }
+
+  .data-table tr {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .data-table th,
+  .data-table td,
+  .data-table .num {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.35rem 1.1rem;
+    text-align: right;
+    border-bottom: 0;
+  }
+
+  .data-table th[scope="row"] {
+    font-size: 1.05rem;
+    text-align: left;
+  }
+
+  .data-table td::before,
+  .data-table th[scope="row"]::before {
+    content: attr(data-label);
+    font-weight: 400;
+    color: var(--color-muted);
+    text-align: left;
+  }
+
+  .data-table th[scope="row"]::before { content: none; }
+
+  .data-table tfoot td[colspan="2"] { display: none; }
+}

@@ -111,6 +111,78 @@
         </div>
       </div>
     </section>
+
+    <section class="section" id="schedule" aria-labelledby="schedule-title">
+      <div class="container">
+        <h2 id="schedule-title" class="section__title">Расписание</h2>
+        <p class="section__lead">Темы курса в порядке, заданном в <code>content.csv</code>. Числовой столбец — поле <code>value</code>.</p>
+
+        <div class="table-wrap">
+          <table class="data-table">
+            <caption class="visually-hidden">Темы курса: номер, название, категория, описание и значение</caption>
+            <thead>
+              <tr>
+                <th scope="col" class="num">№</th>
+                <th scope="col">Тема</th>
+                <th scope="col">Категория</th>
+                <th scope="col">Описание</th>
+                <th scope="col" class="num">Значение</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="№" class="num">1</td>
+                <th scope="row" data-label="Тема">HTML</th>
+                <td data-label="Категория">Основа</td>
+                <td data-label="Описание">Структура и семантика документа</td>
+                <td data-label="Значение" class="num">8</td>
+              </tr>
+              <tr>
+                <td data-label="№" class="num">2</td>
+                <th scope="row" data-label="Тема">CSS</th>
+                <td data-label="Категория">Оформление</td>
+                <td data-label="Описание">Стили и адаптивность</td>
+                <td data-label="Значение" class="num">9</td>
+              </tr>
+              <tr>
+                <td data-label="№" class="num">3</td>
+                <th scope="row" data-label="Тема">Git</th>
+                <td data-label="Категория">Инструменты</td>
+                <td data-label="Описание">История изменений</td>
+                <td data-label="Значение" class="num">7</td>
+              </tr>
+              <tr>
+                <td data-label="№" class="num">4</td>
+                <th scope="row" data-label="Тема">Forms</th>
+                <td data-label="Категория">HTML</td>
+                <td data-label="Описание">Пользовательский ввод</td>
+                <td data-label="Значение" class="num">6</td>
+              </tr>
+              <tr>
+                <td data-label="№" class="num">5</td>
+                <th scope="row" data-label="Тема">Accessibility</th>
+                <td data-label="Категория">Качество</td>
+                <td data-label="Описание">Доступность интерфейса</td>
+                <td data-label="Значение" class="num">10</td>
+              </tr>
+              <tr>
+                <td data-label="№" class="num">6</td>
+                <th scope="row" data-label="Тема">DevTools</th>
+                <td data-label="Категория">Проверка</td>
+                <td data-label="Описание">Исследование DOM и стилей</td>
+                <td data-label="Значение" class="num">8</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th scope="row" colspan="4" data-label="Итого">Сумма значений</th>
+                <td data-label="Значение" class="num">48</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
