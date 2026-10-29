@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Учебный курс ТРПО: темы курса, расписание и регистрация.">
+  <title>Курс ТРПО: HTML и базовая CSS-разметка</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Перейти к основному содержимому</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="#about">
+        <img class="brand__logo" src="images/logo.svg" width="62" height="36" alt="Логотип курса TRPO Course">
+        <span class="brand__name">Практическая работа 1</span>
+      </a>
+
+      <!-- Пункты меню соответствуют data/navigation.json: label → текст, target → якорь -->
+      <nav class="main-nav" aria-label="Основная навигация">
+        <ul class="main-nav__list">
+          <li><a class="main-nav__link" href="#about">О курсе</a></li>
+          <li><a class="main-nav__link" href="#tracks">Направления</a></li>
+          <li><a class="main-nav__link" href="#schedule">Расписание</a></li>
+          <li><a class="main-nav__link" href="#signup">Регистрация</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section hero" id="about" aria-labelledby="about-title">
+      <div class="container hero__inner">
+        <div class="hero__text">
+          <p class="badge">3 семестр, 2026–2027 гг.</p>
+          <h1 id="about-title">HTML и базовая CSS-разметка. Семантическая структура страницы</h1>
+          <p class="lead">Учебный курс по дисциплине «Технологии разработки программного обеспечения». Ниже собраны темы курса, расписание и форма регистрации.</p>
+          <a class="button" href="#signup">Зарегистрироваться</a>
+        </div>
+        <img class="hero__image" src="images/cover.svg" width="900" height="520" alt="Обложка курса: заголовок HTML + CSS и макет страницы">
+      </div>
+    </section>
+
+    <!-- Карточки соответствуют строкам data/content.csv -->
+    <section class="section" id="tracks" aria-labelledby="tracks-title">
+      <div class="container">
+        <h2 id="tracks-title" class="section__title">Направления</h2>
+        <p class="section__lead">Шесть тем курса. Значение показывает оценку темы по шкале от 0 до 10.</p>
+
+        <div class="cards">
+          <article class="card" id="card-1">
+            <p class="badge">Основа</p>
+            <h3 class="card__title">HTML</h3>
+            <p class="card__text">Структура и семантика документа</p>
+            <p class="card__value">
+              <label for="meter-1">Значение: <strong>8</strong> из 10</label>
+              <meter class="card__meter" id="meter-1" min="0" max="10" value="8">8 из 10</meter>
+            </p>
+          </article>
+
+          <article class="card" id="card-2">
+            <p class="badge">Оформление</p>
+            <h3 class="card__title">CSS</h3>
+            <p class="card__text">Стили и адаптивность</p>
+            <p class="card__value">
+              <label for="meter-2">Значение: <strong>9</strong> из 10</label>
+              <meter class="card__meter" id="meter-2" min="0" max="10" value="9">9 из 10</meter>
+            </p>
+          </article>
+
+          <article class="card" id="card-3">
+            <p class="badge">Инструменты</p>
+            <h3 class="card__title">Git</h3>
+            <p class="card__text">История изменений</p>
+            <p class="card__value">
+              <label for="meter-3">Значение: <strong>7</strong> из 10</label>
+              <meter class="card__meter" id="meter-3" min="0" max="10" value="7">7 из 10</meter>
+            </p>
+          </article>
+
+          <article class="card" id="card-4">
+            <p class="badge">HTML</p>
+            <h3 class="card__title">Forms</h3>
+            <p class="card__text">Пользовательский ввод</p>
+            <p class="card__value">
+              <label for="meter-4">Значение: <strong>6</strong> из 10</label>
+              <meter class="card__meter" id="meter-4" min="0" max="10" value="6">6 из 10</meter>
+            </p>
+          </article>
+
+          <article class="card" id="card-5">
+            <p class="badge">Качество</p>
+            <h3 class="card__title">Accessibility</h3>
+            <p class="card__text">Доступность интерфейса</p>
+            <p class="card__value">
+              <label for="meter-5">Значение: <strong>10</strong> из 10</label>
+              <meter class="card__meter" id="meter-5" min="0" max="10" value="10">10 из 10</meter>
+            </p>
+          </article>
+
+          <article class="card" id="card-6">
+            <p class="badge">Проверка</p>
+            <h3 class="card__title">DevTools</h3>
+            <p class="card__text">Исследование DOM и стилей</p>
+            <p class="card__value">
+              <label for="meter-6">Значение: <strong>8</strong> из 10</label>
+              <meter class="card__meter" id="meter-6" min="0" max="10" value="8">8 из 10</meter>
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <h2 class="site-footer__title">Контакты</h2>
+      <p>Кафедра индустриального программирования, Институт перспективных технологий и индустриального программирования.</p>
+      <p>Преподаватель: Макиевский Станислав Евгеньевич.</p>
+    </div>
+  </footer>
+</body>
+</html>
