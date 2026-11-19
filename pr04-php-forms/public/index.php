@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 // Версия учебного приложения и текущая дата — вычисляются на сервере.
 // Если файл открыть как обычный текст, эти значения в браузере не появятся.
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.2.0';
 date_default_timezone_set('Europe/Moscow');
 
 // Ошибки показываем только при локальной разработке (шаг 15).
@@ -34,6 +34,22 @@ $isDemo    = true;                         // bool
 $stack     = ['PHP ' . PHP_VERSION, 'HTML5', 'CSS3', 'CSV', 'JSON'];  // array
 
 $today = date('d.m.Y H:i');
+
+$departments = departmentsOf($employees);
+
+// Обработка POST-формы. Значения по умолчанию для GET-запроса — пустая форма.
+$form = ['full_name' => '', 'email' => '', 'department' => '', 'request_type' => '', 'days' => '', 'comment' => ''];
+$errors = [];
+$accepted = null;   // принятая заявка (после успешной валидации)
+
+if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
+    $result = validateInput($_POST, $departments);
+    $form = $result['values'];
+    $errors = $result['errors'];
+    if ($errors === []) {
+        $accepted = $form;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -46,7 +62,7 @@ $today = date('d.m.Y H:i');
 <body>
 <header class="site-header">
   <h1>Практическая работа 4</h1>
-  <nav><a href="#about">О приложении</a><a href="#employees">Сотрудники</a></nav>
+  <nav><a href="#about">О приложении</a><a href="#employees">Сотрудники</a><a href="#request">Заявка</a></nav>
   <span class="meta">Версия <?= APP_VERSION ?> · <?= $today ?></span>
 </header>
 <main>
@@ -90,6 +106,74 @@ $today = date('d.m.Y H:i');
         <?php endforeach; ?>
         </tbody>
       </table>
+    <?php endif; ?>
+  </section>
+
+  <section class="card" id="request">
+    <h2>Заявка сотрудника</h2>
+    <?php if ($accepted !== null): ?>
+      <div class="alert ok">Заявка принята. Ниже — обработанные значения.</div>
+      <table>
+        <tr><th>Поле</th><th>Значение</th></tr>
+        <tr><td>ФИО</td><td><?= e($accepted['full_name']) ?></td></tr>
+        <tr><td>Email</td><td><?= e($accepted['email']) ?></td></tr>
+        <tr><td>Отдел</td><td><?= e($accepted['department']) ?></td></tr>
+        <tr><td>Тип заявки</td><td><?= e($accepted['request_type']) ?></td></tr>
+        <tr><td>Дней</td><td><?= (int) $accepted['days'] ?></td></tr>
+        <tr><td>Комментарий</td><td><?= $accepted['comment'] !== '' ? e($accepted['comment']) : '<span class="muted">без комментария</span>' ?></td></tr>
+      </table>
+      <p><a class="btn secondary" href="/#request">Подать ещё одну</a></p>
+    <?php else: ?>
+      <?php if ($errors !== []): ?>
+        <div class="alert error">Заявка не отправлена. Исправьте ошибки:
+          <ul><?php foreach ($errors as $message): ?><li><?= e($message) ?></li><?php endforeach; ?></ul>
+        </div>
+      <?php endif; ?>
+      <form method="post" action="/#request" novalidate>
+        <div class="cols">
+          <div class="row <?= isset($errors['full_name']) ? 'has-error' : '' ?>">
+            <label for="full_name">ФИО</label>
+            <input type="text" id="full_name" name="full_name" value="<?= e($form['full_name']) ?>">
+            <?php if (isset($errors['full_name'])): ?><div class="field-error"><?= e($errors['full_name']) ?></div><?php endif; ?>
+          </div>
+          <div class="row <?= isset($errors['email']) ? 'has-error' : '' ?>">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" value="<?= e($form['email']) ?>">
+            <?php if (isset($errors['email'])): ?><div class="field-error"><?= e($errors['email']) ?></div><?php endif; ?>
+          </div>
+          <div class="row <?= isset($errors['department']) ? 'has-error' : '' ?>">
+            <label for="department">Отдел</label>
+            <select id="department" name="department">
+              <option value="">— выберите —</option>
+              <?php foreach ($departments as $dep): ?>
+                <option value="<?= e($dep) ?>" <?= $form['department'] === $dep ? 'selected' : '' ?>><?= e($dep) ?></option>
+              <?php endforeach; ?>
+            </select>
+            <?php if (isset($errors['department'])): ?><div class="field-error"><?= e($errors['department']) ?></div><?php endif; ?>
+          </div>
+          <div class="row <?= isset($errors['request_type']) ? 'has-error' : '' ?>">
+            <label for="request_type">Тип заявки</label>
+            <select id="request_type" name="request_type">
+              <option value="">— выберите —</option>
+              <?php foreach (REQUEST_TYPES as $type): ?>
+                <option value="<?= e($type) ?>" <?= $form['request_type'] === $type ? 'selected' : '' ?>><?= e($type) ?></option>
+              <?php endforeach; ?>
+            </select>
+            <?php if (isset($errors['request_type'])): ?><div class="field-error"><?= e($errors['request_type']) ?></div><?php endif; ?>
+          </div>
+          <div class="row <?= isset($errors['days']) ? 'has-error' : '' ?>">
+            <label for="days">Количество дней (<?= DAYS_MIN ?>–<?= DAYS_MAX ?>)</label>
+            <input type="text" inputmode="numeric" id="days" name="days" value="<?= e($form['days']) ?>">
+            <?php if (isset($errors['days'])): ?><div class="field-error"><?= e($errors['days']) ?></div><?php endif; ?>
+          </div>
+          <div class="row <?= isset($errors['comment']) ? 'has-error' : '' ?>">
+            <label for="comment">Комментарий (необязательно)</label>
+            <textarea id="comment" name="comment"><?= e($form['comment']) ?></textarea>
+            <?php if (isset($errors['comment'])): ?><div class="field-error"><?= e($errors['comment']) ?></div><?php endif; ?>
+          </div>
+        </div>
+        <button type="submit">Отправить заявку</button>
+      </form>
     <?php endif; ?>
   </section>
 </main>

@@ -87,3 +87,87 @@ function formatMoney(int $amount): string
 {
     return number_format($amount, 0, ',', ' ') . ' ₽';
 }
+
+// ---------------------------------------------------------------------------
+// Форма заявки сотрудника: нормализация и серверная валидация
+// ---------------------------------------------------------------------------
+
+const REQUEST_TYPES   = ['Отпуск', 'Командировка', 'Оборудование', 'Обучение'];
+const NAME_MIN_LENGTH = 2;
+const NAME_MAX_LENGTH = 80;
+const COMMENT_MAX     = 200;
+const DAYS_MIN        = 1;
+const DAYS_MAX        = 30;
+const FORM_FIELDS     = ['full_name', 'email', 'department', 'request_type', 'days', 'comment'];
+
+/**
+ * Берёт из «сырых» входных данных только известные поля и приводит их к строке с trim().
+ * Если значение пришло не строкой (например full_name[]=x), оно считается пустым.
+ */
+function normalizeInput(array $source): array
+{
+    $values = [];
+    foreach (FORM_FIELDS as $field) {
+        $raw = $source[$field] ?? '';
+        $values[$field] = is_string($raw) ? trim($raw) : '';
+    }
+    return $values;
+}
+
+/**
+ * Проверяет значения формы. Возвращает ['values' => нормализованные, 'errors' => [поле => сообщение]].
+ * Пустой массив errors означает, что данные корректны.
+ */
+function validateInput(array $source, array $departments): array
+{
+    $values = normalizeInput($source);
+    $errors = [];
+
+    // ФИО: обязательность и длина
+    $nameLength = mb_strlen($values['full_name'], 'UTF-8');
+    if ($values['full_name'] === '') {
+        $errors['full_name'] = 'Укажите ФИО';
+    } elseif ($nameLength < NAME_MIN_LENGTH || $nameLength > NAME_MAX_LENGTH) {
+        $errors['full_name'] = sprintf('ФИО должно содержать от %d до %d символов', NAME_MIN_LENGTH, NAME_MAX_LENGTH);
+    }
+
+    // Email
+    if ($values['email'] === '') {
+        $errors['email'] = 'Укажите email';
+    } elseif (filter_var($values['email'], FILTER_VALIDATE_EMAIL) === false) {
+        $errors['email'] = 'Некорректный email';
+    }
+
+    // Отдел — только из списка, полученного из employees.csv
+    if ($values['department'] === '') {
+        $errors['department'] = 'Выберите отдел';
+    } elseif (!in_array($values['department'], $departments, true)) {
+        $errors['department'] = 'Такого отдела нет в списке';
+    }
+
+    // Тип заявки — только из допустимых значений
+    if ($values['request_type'] === '') {
+        $errors['request_type'] = 'Выберите тип заявки';
+    } elseif (!in_array($values['request_type'], REQUEST_TYPES, true)) {
+        $errors['request_type'] = 'Недопустимый тип заявки';
+    }
+
+    // Количество дней: целое число в диапазоне
+    if ($values['days'] === '') {
+        $errors['days'] = 'Укажите количество дней';
+    } elseif (filter_var($values['days'], FILTER_VALIDATE_INT) === false) {
+        $errors['days'] = 'Количество дней должно быть целым числом';
+    } else {
+        $days = (int) $values['days'];
+        if ($days < DAYS_MIN || $days > DAYS_MAX) {
+            $errors['days'] = sprintf('Количество дней должно быть от %d до %d', DAYS_MIN, DAYS_MAX);
+        }
+    }
+
+    // Комментарий необязателен, но ограничен по длине
+    if (mb_strlen($values['comment'], 'UTF-8') > COMMENT_MAX) {
+        $errors['comment'] = sprintf('Комментарий не длиннее %d символов', COMMENT_MAX);
+    }
+
+    return ['values' => $values, 'errors' => $errors];
+}
