@@ -8,6 +8,7 @@ ini_set('display_errors', getenv('APP_ENV') === 'prod' ? '0' : '1');
 require_once __DIR__ . '/../src/Model/Category.php';
 require_once __DIR__ . '/../src/Model/Product.php';
 require_once __DIR__ . '/../src/Service/CatalogService.php';
+require_once __DIR__ . '/../src/Service/RequirementsChecker.php';
 require_once __DIR__ . '/../src/view_helpers.php';
 
 $service = new CatalogService(__DIR__ . '/../data/products.json', __DIR__ . '/../data/categories.json');
@@ -35,6 +36,32 @@ try {
 } catch (RuntimeException $ex) {
     $fatalError = $ex->getMessage();
 }
+
+// --- Требования к классам из class_requirements.csv --------------------------
+$requirementResults = [];
+$requirementsError = null;
+try {
+    $requirementResults = (new RequirementsChecker(__DIR__ . '/../data/class_requirements.csv'))->check();
+} catch (RuntimeException $ex) {
+    $requirementsError = $ex->getMessage();
+}
+$requirementsOk = count(array_filter($requirementResults, static fn(array $r): bool => $r['ok']));
+
+// --- Демонстрация защиты конструктора: некорректные данные не создают объект --
+$constructorDemo = [];
+$demoCases = [
+    'Отрицательная цена'   => fn() => new Product(100, 'Тестовый товар', -10.0, 1, 'T-1', 1),
+    'Пустое название'      => fn() => new Product(101, '   ', 10.0, 1, 'T-2', 1),
+    'Скидка больше 90%'    => fn() => new Product(102, 'Тестовый товар', 10.0, 1, 'T-3', 1, null, 95),
+];
+foreach ($demoCases as $title => $factory) {
+    try {
+        $factory();
+        $constructorDemo[$title] = 'объект создан (неожиданно)';
+    } catch (InvalidArgumentException $ex) {
+        $constructorDemo[$title] = 'InvalidArgumentException: ' . $ex->getMessage();
+    }
+}
 $totalCount = count($products);
 $averagePrice = $fatalError === null ? $service->averagePrice($products) : 0.0;
 $stockValue = $fatalError === null ? $service->stockValue($products) : 0.0;
@@ -50,7 +77,7 @@ $stockValue = $fatalError === null ? $service->stockValue($products) : 0.0;
 <body>
 <header class="site-header">
   <h1>Практическая работа 5</h1>
-  <nav><a href="#filter">Фильтр</a><a href="#catalog">Каталог</a></nav>
+  <nav><a href="#filter">Фильтр</a><a href="#catalog">Каталог</a><a href="#requirements">Требования</a><a href="#constructor">Конструктор</a></nav>
   <span class="meta">PHP ООП · Product → CatalogService → index.php</span>
 </header>
 <main>
@@ -126,6 +153,39 @@ $stockValue = $fatalError === null ? $service->stockValue($products) : 0.0;
   </section>
 
   <?php endif; ?>
+
+  <section class="card" id="requirements">
+    <h2>Требования из class_requirements.csv</h2>
+    <?php if ($requirementsError !== null): ?>
+      <div class="alert error"><?= e($requirementsError) ?></div>
+    <?php else: ?>
+      <p class="muted">Выполнено <?= $requirementsOk ?> из <?= count($requirementResults) ?> (проверка через Reflection)</p>
+      <table>
+        <thead><tr><th>Класс</th><th>Член</th><th>Вид</th><th>Тип</th><th>Обяз.</th><th>Назначение</th><th>Итог</th></tr></thead>
+        <tbody>
+        <?php foreach ($requirementResults as $r): ?>
+          <tr>
+            <td><?= e($r['class']) ?></td><td><code><?= e($r['member']) ?></code></td><td><?= e($r['kind']) ?></td>
+            <td><code><?= e($r['type']) ?></code></td><td><?= $r['required'] === 'yes' ? 'да' : 'нет' ?></td>
+            <td><?= e($r['description']) ?></td>
+            <td class="<?= $r['ok'] ? 'pass' : 'fail' ?>"><?= $r['ok'] ? 'OK' : 'FAIL: ' . e($r['note']) ?></td>
+          </tr>
+        <?php endforeach; ?>
+        </tbody>
+      </table>
+    <?php endif; ?>
+  </section>
+
+  <section class="card" id="constructor">
+    <h2>Проверка некорректного конструктора</h2>
+    <p class="muted">Конструктор <code>Product</code> бросает <code>InvalidArgumentException</code>, поэтому объект с неверным состоянием создать нельзя.</p>
+    <table>
+      <tr><th>Вход</th><th>Результат</th></tr>
+      <?php foreach ($constructorDemo as $title => $result): ?>
+        <tr><td><?= e($title) ?></td><td><?= e($result) ?></td></tr>
+      <?php endforeach; ?>
+    </table>
+  </section>
 </main>
 </body>
 </html>
