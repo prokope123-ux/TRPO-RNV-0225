@@ -120,3 +120,49 @@ POST всегда заканчивается redirect (Post/Redirect/Get), по�
 - Сессии хранятся в файлах сервера и привязаны к браузеру; при масштабировании нужно общее хранилище сессий.
 - Нет автозагрузки классов и маршрутизатора: `require_once` вручную, `if`/таблица маршрутов — следующий шаг MVC (контроллеры, `Views/`, репозитории).
 - Тестовые правки `notes.json` попадают в Git, если работать не на копии: для автотестов используется переменная `APP_DATA_DIR`.
+
+## Скриншоты
+
+**Главная: заметки из notes.json, в шапке «Гость»**
+
+![Главная: заметки из notes.json, в шапке «Гость»](docs/screenshots/01-notes-guest.png)
+
+**Пользователи из users.json**
+
+![Пользователи из users.json](docs/screenshots/02-users.png)
+
+**Вход: имя и тёмная тема сохраняются в session**
+
+![Вход: имя и тёмная тема сохраняются в session](docs/screenshots/03-login-anna-dark.png)
+
+**Форма заметки: ошибки валидации, значения сохраняются**
+
+![Форма заметки: ошибки валидации, значения сохраняются](docs/screenshots/04-note-form-errors.png)
+
+**После POST — redirect и одноразовое сообщение**
+
+![После POST — redirect и одноразовое сообщение](docs/screenshots/05-note-added-flash.png)
+
+**Новая заметка записана в notes.json, автор — из session**
+
+![Новая заметка записана в notes.json, автор — из session](docs/screenshots/06-note-in-list.png)
+
+**Сценарии из session_scenarios.json: 8 из 8**
+
+![Сценарии из session_scenarios.json: 8 из 8](docs/screenshots/07-session-scenarios.png)
+
+**Неизвестное значение page → страница 404**
+
+![Неизвестное значение page → страница 404](docs/screenshots/08-404.png)
+
+**Ошибочное состояние: повреждённый notes.json**
+
+![Ошибочное состояние: повреждённый notes.json](docs/screenshots/09-error-corrupt-json.png)
+
+**Обычная вкладка: вошли как Анна Смирнова**
+
+![Обычная вкладка: вошли как Анна Смирнова](docs/screenshots/10-normal-tab-logged-in.png)
+
+**Приватное окно: другая cookie → снова «Гость»**
+
+![Приватное окно: другая cookie → снова «Гость»](docs/screenshots/11-private-window-guest.png)
