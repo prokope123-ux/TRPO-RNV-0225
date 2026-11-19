@@ -16,6 +16,7 @@ $nextTheme = $state['theme'] === 'dark' ? 'light' : 'dark';
   <nav>
     <a href="<?= e(url('notes')) ?>" class="<?= $page === 'notes' ? 'active' : '' ?>">Заметки</a>
     <a href="<?= e(url('users')) ?>" class="<?= $page === 'users' ? 'active' : '' ?>">Пользователи</a>
+    <a href="<?= e(url('scenarios')) ?>" class="<?= $page === 'scenarios' ? 'active' : '' ?>">Сценарии</a>
   </nav>
   <div class="who" id="session-state">
     <span>Пользователь: <strong id="who-name"><?= e($state['display_name']) ?></strong> · режим: <?= $state['theme'] === 'dark' ? 'тёмный' : 'светлый' ?></span>

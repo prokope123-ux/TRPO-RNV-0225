@@ -21,6 +21,7 @@ initSessionState();
 $routes = [
     'notes' => ['template' => 'list',  'title' => 'Заметки',      'handler' => 'buildNotesPage'],
     'users' => ['template' => 'users', 'title' => 'Пользователи', 'handler' => 'buildUsersPage'],
+    'scenarios' => ['template' => 'scenarios', 'title' => 'Сценарии session', 'handler' => 'buildScenariosPage'],
 ];
 
 // POST: изменить данные и сделать redirect. HTML здесь не выводится.
