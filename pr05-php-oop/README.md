@@ -16,8 +16,8 @@ PHP 8.1 или новее с расширениями `json` и `mbstring` (вх
 ## Запуск (чистый запуск по README)
 
 ```bash
-git clone <ссылка-на-репозиторий> trpo-pr05-student
-cd trpo-pr05-student
+git clone https://github.com/prokope123-ux/TRPO-RNV-0225.git
+cd TRPO-RNV-0225/pr05-php-oop
 php -S localhost:8000 -t public
 ```
 

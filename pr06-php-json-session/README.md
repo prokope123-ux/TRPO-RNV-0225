@@ -15,8 +15,8 @@ PHP 8.1 или новее с расширениями `json`, `mbstring`, `sessi
 ## Запуск (чистый запуск по README)
 
 ```bash
-git clone <ссылка-на-репозиторий> trpo-pr06-student
-cd trpo-pr06-student
+git clone https://github.com/prokope123-ux/TRPO-RNV-0225.git
+cd TRPO-RNV-0225/pr06-php-json-session
 php -S localhost:8000 -t public
 ```
 

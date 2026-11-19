@@ -14,8 +14,8 @@ PHP 8.1+ (разработано на 8.3), HTML5, CSS3. Внешних зави
 ## Запуск (чистый запуск по README)
 
 ```bash
-git clone <ссылка-на-репозиторий> trpo-pr04-student
-cd trpo-pr04-student
+git clone https://github.com/prokope123-ux/TRPO-RNV-0225.git
+cd TRPO-RNV-0225/pr04-php-forms
 php -S localhost:8000 -t public
 ```
 
