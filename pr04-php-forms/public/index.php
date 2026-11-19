@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 // Версия учебного приложения и текущая дата — вычисляются на сервере.
 // Если файл открыть как обычный текст, эти значения в браузере не появятся.
-const APP_VERSION = '1.2.0';
+const APP_VERSION = '1.3.0';
 date_default_timezone_set('Europe/Moscow');
 
 // Ошибки показываем только при локальной разработке (шаг 15).
@@ -37,6 +37,27 @@ $today = date('d.m.Y H:i');
 
 $departments = departmentsOf($employees);
 
+// GET-фильтр по отделу. Нет параметра — показываем всех; неизвестное значение игнорируем.
+$filter = $_GET['department'] ?? '';
+$filter = is_string($filter) ? trim($filter) : '';
+$filterNotice = null;
+if ($filter !== '' && !in_array($filter, $departments, true)) {
+    $filterNotice = 'Отдел «' . $filter . '» не найден — показаны все сотрудники.';
+    $filter = '';
+}
+$visibleEmployees = filterEmployees($employees, $filter);
+
+// Сценарии проверки из form_cases.json
+$caseResults = [];
+$casesError = null;
+try {
+    foreach (loadFormCases($dataDir . '/form_cases.json') as $case) {
+        $caseResults[] = ['case' => $case] + runCase($case, $departments);
+    }
+} catch (RuntimeException $ex) {
+    $casesError = $ex->getMessage();
+}
+
 // Обработка POST-формы. Значения по умолчанию для GET-запроса — пустая форма.
 $form = ['full_name' => '', 'email' => '', 'department' => '', 'request_type' => '', 'days' => '', 'comment' => ''];
 $errors = [];
@@ -62,7 +83,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
 <body>
 <header class="site-header">
   <h1>Практическая работа 4</h1>
-  <nav><a href="#about">О приложении</a><a href="#employees">Сотрудники</a><a href="#request">Заявка</a></nav>
+  <nav><a href="#about">О приложении</a><a href="#employees">Сотрудники</a><a href="#request">Заявка</a><a href="#cases">Сценарии</a></nav>
   <span class="meta">Версия <?= APP_VERSION ?> · <?= $today ?></span>
 </header>
 <main>
@@ -82,10 +103,27 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
 
   <section class="card" id="employees">
     <h2>Сотрудники</h2>
+    <form method="get" action="/#employees" class="inline-form">
+      <div class="row">
+        <label for="f_department">Фильтр по отделу</label>
+        <select id="f_department" name="department">
+          <option value="">Все отделы</option>
+          <?php foreach ($departments as $dep): ?>
+            <option value="<?= e($dep) ?>" <?= $filter === $dep ? 'selected' : '' ?>><?= e($dep) ?></option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+      <button type="submit">Показать</button>
+      <a class="btn secondary" href="/#employees">Сбросить</a>
+    </form>
+    <p class="muted">Показано: <?= count($visibleEmployees) ?> из <?= count($employees) ?></p>
+    <?php if ($filterNotice !== null): ?><div class="alert error"><?= e($filterNotice) ?></div><?php endif; ?>
     <?php if ($loadError !== null): ?>
       <div class="alert error"><?= e($loadError) ?>. Проверьте файл <code>data/employees.csv</code>.</div>
     <?php elseif ($employees === []): ?>
       <p class="empty">В employees.csv нет ни одной корректной записи.</p>
+    <?php elseif ($visibleEmployees === []): ?>
+      <p class="empty">По выбранному отделу сотрудников нет.</p>
     <?php else: ?>
       <?php if ($skippedRows > 0): ?>
         <div class="alert error">Пропущено повреждённых строк: <?= $skippedRows ?></div>
@@ -93,7 +131,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
       <table>
         <thead><tr><th>ID</th><th>ФИО</th><th>Email</th><th>Отдел</th><th>Должность</th><th>Оклад</th><th>Принят</th></tr></thead>
         <tbody>
-        <?php foreach ($employees as $emp): ?>
+        <?php foreach ($visibleEmployees as $emp): ?>
           <tr>
             <td><?= $emp['id'] ?></td>
             <td><?= e($emp['full_name']) ?></td>
@@ -174,6 +212,30 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
         </div>
         <button type="submit">Отправить заявку</button>
       </form>
+    <?php endif; ?>
+  </section>
+  <section class="card" id="cases">
+    <h2>Проверка сценариев из form_cases.json</h2>
+    <?php if ($casesError !== null): ?>
+      <div class="alert error"><?= e($casesError) ?></div>
+    <?php elseif ($caseResults === []): ?>
+      <p class="empty">В form_cases.json нет сценариев.</p>
+    <?php else: ?>
+      <?php $okCount = count(array_filter($caseResults, static fn(array $r): bool => $r['passed'])); ?>
+      <p class="muted">Пройдено <?= $okCount ?> из <?= count($caseResults) ?></p>
+      <table>
+        <thead><tr><th>Сценарий</th><th>Ожидаемые ошибки в полях</th><th>Получено</th><th>Итог</th></tr></thead>
+        <tbody>
+        <?php foreach ($caseResults as $r): ?>
+          <tr>
+            <td><?= e($r['case']['title'] ?? $r['case']['id'] ?? '—') ?></td>
+            <td><?= $r['expected_fields'] === [] ? '—' : e(implode(', ', $r['expected_fields'])) ?></td>
+            <td><?= $r['actual_fields'] === [] ? '—' : e(implode(', ', $r['actual_fields'])) ?></td>
+            <td class="<?= $r['passed'] ? 'pass' : 'fail' ?>"><?= $r['passed'] ? 'OK' : 'FAIL' ?></td>
+          </tr>
+        <?php endforeach; ?>
+        </tbody>
+      </table>
     <?php endif; ?>
   </section>
 </main>

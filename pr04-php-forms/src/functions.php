@@ -171,3 +171,61 @@ function validateInput(array $source, array $departments): array
 
     return ['values' => $values, 'errors' => $errors];
 }
+
+// ---------------------------------------------------------------------------
+// Фильтрация таблицы и проверка сценариев из form_cases.json
+// ---------------------------------------------------------------------------
+
+/**
+ * Фильтр по отделу. Пустое значение (параметра нет) — вернуть всех.
+ */
+function filterEmployees(array $employees, string $department): array
+{
+    if ($department === '') {
+        return $employees;
+    }
+    return array_values(array_filter(
+        $employees,
+        static fn(array $emp): bool => $emp['department'] === $department
+    ));
+}
+
+/**
+ * Читает form_cases.json. Бросает RuntimeException при отсутствии файла или неверном JSON.
+ */
+function loadFormCases(string $path): array
+{
+    if (!is_readable($path)) {
+        throw new RuntimeException('Файл сценариев недоступен: ' . basename($path));
+    }
+    try {
+        $data = json_decode((string) file_get_contents($path), true, 512, JSON_THROW_ON_ERROR);
+    } catch (JsonException $ex) {
+        throw new RuntimeException('form_cases.json повреждён: ' . $ex->getMessage());
+    }
+    return is_array($data['cases'] ?? null) ? $data['cases'] : [];
+}
+
+/**
+ * Прогоняет один сценарий через validateInput и сравнивает с ожиданием.
+ * Возвращает ['passed' => bool, 'actual_fields' => [...], 'expected_fields' => [...]].
+ */
+function runCase(array $case, array $departments): array
+{
+    $result = validateInput($case['input'] ?? [], $departments);
+    $actual = array_keys($result['errors']);
+    $expected = $case['expect']['error_fields'] ?? [];
+    $expectedValid = (bool) ($case['expect']['valid'] ?? false);
+
+    sort($actual);
+    sort($expected);
+    $passed = ($actual === $expected) && ($expectedValid === ($actual === []));
+
+    // Сценарий про экранирование: опасная строка не должна попасть в HTML как есть.
+    if ($passed && !empty($case['expect']['escaped'])) {
+        $comment = $result['values']['comment'];
+        $passed = $comment !== e($comment) && !str_contains(e($comment), '<script');
+    }
+
+    return ['passed' => $passed, 'actual_fields' => $actual, 'expected_fields' => $expected];
+}
