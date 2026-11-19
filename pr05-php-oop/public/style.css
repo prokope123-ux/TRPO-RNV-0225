@@ -1,0 +1,68 @@
+:root {
+  --bg: #f4f5fa;
+  --card: #ffffff;
+  --ink: #1f2937;
+  --muted: #6b7280;
+  --accent: #2f55f5;
+  --accent-soft: #e8edff;
+  --danger: #b42318;
+  --danger-soft: #fdecea;
+  --ok: #067647;
+  --ok-soft: #e7f6ee;
+  --line: #e5e7ee;
+  --header: #111827;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+.site-header { background: var(--header); color: #fff; padding: 22px 44px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.site-header h1 { margin: 0; font-size: 24px; }
+.site-header nav a { color: #d1d5e6; text-decoration: none; margin-left: 20px; }
+.site-header nav a:hover, .site-header nav a.active { color: #fff; text-decoration: underline; }
+.site-header .meta { font-size: 14px; color: #aab1c8; }
+main { max-width: 1170px; margin: 0 auto; padding: 32px 24px 56px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 26px 30px; margin-bottom: 24px; }
+.card h2 { margin: 0 0 14px; font-size: 22px; }
+.card h3 { margin: 0 0 8px; font-size: 18px; }
+.badge { display: inline-block; background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 3px 14px; font-size: 14px; margin-bottom: 10px; }
+.muted { color: var(--muted); font-size: 14px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-bottom: 24px; }
+.grid .card { margin-bottom: 0; }
+.value { color: var(--accent); font-size: 18px; }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; font-size: 14px; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+form .row { margin-bottom: 14px; }
+label { display: block; font-weight: 600; margin-bottom: 4px; font-size: 14px; }
+input[type=text], input[type=email], input[type=number], input[type=search], select, textarea {
+  width: 100%; padding: 9px 12px; border: 1px solid #cfd4e2; border-radius: 10px; font: inherit; background: #fff;
+}
+textarea { min-height: 80px; resize: vertical; }
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.has-error input, .has-error select, .has-error textarea { border-color: var(--danger); }
+.field-error { color: var(--danger); font-size: 13px; margin-top: 3px; }
+button, .btn { background: var(--accent); color: #fff; border: 0; border-radius: 10px; padding: 10px 20px; font: inherit; cursor: pointer; text-decoration: none; display: inline-block; }
+button.secondary, .btn.secondary { background: var(--accent-soft); color: var(--accent); }
+.alert { border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; }
+.alert.error { background: var(--danger-soft); color: var(--danger); }
+.alert.ok { background: var(--ok-soft); color: var(--ok); }
+.alert ul { margin: 6px 0 0; padding-left: 20px; }
+.pass { color: var(--ok); font-weight: 600; }
+.fail { color: var(--danger); font-weight: 600; }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0 24px; }
+.inline-form { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; }
+.inline-form .row { margin: 0; min-width: 220px; }
+code { background: #eef0f6; padding: 1px 6px; border-radius: 6px; font-size: 90%; }
+.empty { text-align: center; padding: 26px; color: var(--muted); }
+
+/* Карточки каталога */
+.products { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+.product { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px 22px; display: flex; flex-direction: column; gap: 8px; }
+.product h3 { margin: 0; font-size: 17px; }
+.product .cat { font-size: 13px; color: var(--accent); }
+.product .price { font-size: 22px; font-weight: 700; }
+.product .old { color: var(--muted); text-decoration: line-through; font-size: 15px; margin-left: 6px; }
+.product .sale { background: var(--danger-soft); color: var(--danger); border-radius: 8px; padding: 1px 8px; font-size: 13px; margin-left: 6px; }
+.stock-ok { color: var(--ok); } .stock-low { color: #b54708; } .stock-out { color: var(--danger); }
+.stats { display: flex; gap: 32px; flex-wrap: wrap; }
+.stats div strong { display: block; font-size: 24px; color: var(--accent); }

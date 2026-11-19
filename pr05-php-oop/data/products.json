@@ -1,0 +1,16 @@
+[
+  {"id": 1,  "name": "Клавиатура механическая K87", "price": 7490,    "category_id": 1, "sku": "KB-K87",  "stock": 25, "description": "Механическая клавиатура TKL с переключателями Red и белой подсветкой.", "discount_percent": 10},
+  {"id": 2,  "name": "Клавиатура мембранная Slim",  "price": 1990.5,  "category_id": 1, "sku": "KB-SLM",  "stock": 120, "description": null, "discount_percent": null},
+  {"id": 3,  "name": "Мышь беспроводная M330",      "price": 1590,    "category_id": 2, "sku": "MS-M330", "stock": 4,  "description": "Тихая беспроводная мышь, работает от одной батарейки до 18 месяцев.", "discount_percent": null},
+  {"id": 4,  "name": "Мышь игровая G-Pro",          "price": 5990,    "category_id": 2, "sku": "MS-GPRO", "stock": 0,  "description": "", "discount_percent": 15},
+  {"id": 5,  "name": "Монитор 24\" IPS FHD",        "price": 13990,   "category_id": 3, "sku": "MN-24F",  "stock": 12, "description": "Диагональ 24 дюйма, матрица IPS, 75 Гц, HDMI и DisplayPort.", "discount_percent": 5},
+  {"id": 6,  "name": "Монитор 27\" QHD",            "price": 24990,   "category_id": 3, "sku": "MN-27Q",  "stock": 3,  "description": "Разрешение 2560×1440, поддержка sRGB 99%.", "discount_percent": null},
+  {"id": 7,  "name": "Коврик для мыши XL",          "price": 890,     "category_id": 4, "sku": "AC-PAD",  "stock": 60, "description": null, "discount_percent": 20},
+  {"id": 8,  "name": "USB-хаб 4 порта",             "price": 1290,    "category_id": 4, "sku": "AC-HUB4", "stock": 0,  "description": "Четыре порта USB 3.0, питание от шины.", "discount_percent": null},
+  {"id": 9,  "name": "Наушники накладные Studio",   "price": 4590,    "category_id": 5, "sku": "HP-STD",  "stock": 18, "description": "Закрытые наушники с мягкими амбушюрами и съёмным кабелем.", "discount_percent": 12},
+  {"id": 10, "name": "Наушники TWS Mini",           "price": 2990,    "category_id": 5, "sku": "HP-TWS",  "stock": 2,  "description": "Беспроводные вкладыши с кейсом на 20 часов работы.", "discount_percent": null},
+  {"id": 11, "name": "Веб-камера FullHD",           "price": 3290,    "category_id": 999, "sku": "WC-FHD", "stock": 9,  "description": "Категория товара отсутствует в categories.json — проверка «Без категории».", "discount_percent": null},
+  {"id": 12, "name": "Бракованная запись",          "price": -500,    "category_id": 4, "sku": "AC-BAD",  "stock": 5,  "description": "Отрицательная цена — конструктор Product должен отклонить эту строку.", "discount_percent": null},
+  {"id": 13, "name": "   ",                         "price": 100,     "category_id": 4, "sku": "AC-EMPTY", "stock": 1, "description": null, "discount_percent": null},
+  {"id": 14, "name": "Кабель HDMI 2 м",             "price": 590,     "category_id": 4, "sku": "AC-HDMI", "stock": 40, "description": "Кабель HDMI 2.0, позолоченные контакты.", "discount_percent": null}
+]
