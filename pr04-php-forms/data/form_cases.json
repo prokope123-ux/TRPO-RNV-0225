@@ -1,0 +1,269 @@
+{
+  "description": "Сценарии проверки серверной валидации формы заявки сотрудника",
+  "cases": [
+    {
+      "id": "ok-vacation",
+      "title": "Корректная заявка на отпуск",
+      "input": {
+        "full_name": "Иванов Пётр Сергеевич",
+        "email": "p.ivanov@example.com",
+        "department": "Разработка",
+        "request_type": "Отпуск",
+        "days": "14",
+        "comment": "Семейные обстоятельства"
+      },
+      "expect": {
+        "valid": true,
+        "error_fields": []
+      }
+    },
+    {
+      "id": "ok-no-comment",
+      "title": "Корректная заявка без необязательного комментария",
+      "input": {
+        "full_name": "Смирнова Анна Олеговна",
+        "email": "a.smirnova@example.com",
+        "department": "Аналитика",
+        "request_type": "Обучение",
+        "days": "3",
+        "comment": ""
+      },
+      "expect": {
+        "valid": true,
+        "error_fields": []
+      }
+    },
+    {
+      "id": "empty-form",
+      "title": "Полностью пустая форма",
+      "input": {},
+      "expect": {
+        "valid": false,
+        "error_fields": [
+          "full_name",
+          "email",
+          "department",
+          "request_type",
+          "days"
+        ]
+      }
+    },
+    {
+      "id": "spaces-name",
+      "title": "Имя из одних пробелов считается пустым",
+      "input": {
+        "full_name": "     ",
+        "email": "a@example.com",
+        "department": "HR",
+        "request_type": "Отпуск",
+        "days": "5",
+        "comment": ""
+      },
+      "expect": {
+        "valid": false,
+        "error_fields": [
+          "full_name"
+        ]
+      }
+    },
+    {
+      "id": "short-name",
+      "title": "Слишком короткое имя",
+      "input": {
+        "full_name": "И",
+        "email": "a@example.com",
+        "department": "HR",
+        "request_type": "Отпуск",
+        "days": "5",
+        "comment": ""
+      },
+      "expect": {
+        "valid": false,
+        "error_fields": [
+          "full_name"
+        ]
+      }
+    },
+    {
+      "id": "bad-email",
+      "title": "Некорректный email",
+      "input": {
+        "full_name": "Попова Мария Игоревна",
+        "email": "popova@@example",
+        "department": "Дизайн",
+        "request_type": "Командировка",
+        "days": "2",
+        "comment": ""
+      },
+      "expect": {
+        "valid": false,
+        "error_fields": [
+          "email"
+        ]
+      }
+    },
+    {
+      "id": "unknown-department",
+      "title": "Отдел, которого нет в employees.csv",
+      "input": {
+        "full_name": "Кузнецов Дмитрий Андреевич",
+        "email": "d.kuznetsov@example.com",
+        "department": "Бухгалтерия",
+        "request_type": "Отпуск",
+        "days": "5",
+        "comment": ""
+      },
+      "expect": {
+        "valid": false,
+        "error_fields": [
+          "department"
+        ]
+      }
+    },
+    {
+      "id": "unknown-type",
+      "title": "Недопустимый тип заявки",
+      "input": {
+        "full_name": "Кузнецов Дмитрий Андреевич",
+        "email": "d.kuznetsov@example.com",
+        "department": "Тестирование",
+        "request_type": "Премия",
+        "days": "5",
+        "comment": ""
+      },
+      "expect": {
+        "valid": false,
+        "error_fields": [
+          "request_type"
+        ]
+      }
+    },
+    {
+      "id": "days-zero",
+      "title": "Количество дней ниже допустимого диапазона",
+      "input": {
+        "full_name": "Лебедева Ольга Викторовна",
+        "email": "o.lebedeva@example.com",
+        "department": "Поддержка",
+        "request_type": "Отпуск",
+        "days": "0",
+        "comment": ""
+      },
+      "expect": {
+        "valid": false,
+        "error_fields": [
+          "days"
+        ]
+      }
+    },
+    {
+      "id": "days-too-many",
+      "title": "Количество дней выше допустимого диапазона",
+      "input": {
+        "full_name": "Лебедева Ольга Викторовна",
+        "email": "o.lebedeva@example.com",
+        "department": "Поддержка",
+        "request_type": "Отпуск",
+        "days": "31",
+        "comment": ""
+      },
+      "expect": {
+        "valid": false,
+        "error_fields": [
+          "days"
+        ]
+      }
+    },
+    {
+      "id": "days-not-number",
+      "title": "Количество дней — не число",
+      "input": {
+        "full_name": "Лебедева Ольга Викторовна",
+        "email": "o.lebedeva@example.com",
+        "department": "Поддержка",
+        "request_type": "Отпуск",
+        "days": "abc",
+        "comment": ""
+      },
+      "expect": {
+        "valid": false,
+        "error_fields": [
+          "days"
+        ]
+      }
+    },
+    {
+      "id": "days-float",
+      "title": "Дробное количество дней",
+      "input": {
+        "full_name": "Лебедева Ольга Викторовна",
+        "email": "o.lebedeva@example.com",
+        "department": "Поддержка",
+        "request_type": "Отпуск",
+        "days": "2.5",
+        "comment": ""
+      },
+      "expect": {
+        "valid": false,
+        "error_fields": [
+          "days"
+        ]
+      }
+    },
+    {
+      "id": "comment-too-long",
+      "title": "Слишком длинный комментарий (больше 200 символов)",
+      "input": {
+        "full_name": "Новикова Елена Сергеевна",
+        "email": "e.novikova@example.com",
+        "department": "HR",
+        "request_type": "Оборудование",
+        "days": "1",
+        "comment": "Очень длинный комментарий. Очень длинный комментарий. Очень длинный комментарий. Очень длинный комментарий. Очень длинный комментарий. Очень длинный комментарий. Очень длинный комментарий. Очень длинный комментарий. Очень длинный комментарий. Очень длинный комментарий. "
+      },
+      "expect": {
+        "valid": false,
+        "error_fields": [
+          "comment"
+        ]
+      }
+    },
+    {
+      "id": "xss-comment",
+      "title": "HTML в комментарии: данные валидны, но при выводе обязаны быть экранированы",
+      "input": {
+        "full_name": "Морозов Илья Денисович",
+        "email": "i.morozov@example.com",
+        "department": "Тестирование",
+        "request_type": "Оборудование",
+        "days": "1",
+        "comment": "<script>alert('xss')</script>"
+      },
+      "expect": {
+        "valid": true,
+        "error_fields": [],
+        "escaped": true
+      }
+    },
+    {
+      "id": "several-errors",
+      "title": "Несколько ошибок одновременно",
+      "input": {
+        "full_name": "",
+        "email": "не-почта",
+        "department": "HR",
+        "request_type": "Отпуск",
+        "days": "100",
+        "comment": ""
+      },
+      "expect": {
+        "valid": false,
+        "error_fields": [
+          "full_name",
+          "email",
+          "days"
+        ]
+      }
+    }
+  ]
+}

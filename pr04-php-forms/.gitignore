@@ -1,0 +1,13 @@
+# Редакторы и ОС
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Локальные файлы
+.env
+*.log
+/vendor/
+/node_modules/
+/tmp/
