@@ -103,3 +103,33 @@ class_requirements.csv ──► RequirementsChecker ──► таблица «
 
 Данные читаются целиком при каждом запросе; хранилище только для чтения; фильтр — один по категории и наличию;
 классы подключаются вручную (см. выше); `Product` ничего не знает о формате вывода — форматирование цены лежит в `view_helpers.php`.
+
+## Скриншоты
+
+**Каталог: фильтр, предупреждения о пропущенных строках, агрегаты**
+
+![Каталог: фильтр, предупреждения о пропущенных строках, агрегаты](docs/screenshots/01-catalog-overview.png)
+
+**Карточки товаров: скидка, остаток, «Без категории», «Описание отсутствует»**
+
+![Карточки товаров: скидка, остаток, «Без категории», «Описание отсутствует»](docs/screenshots/02-product-cards.png)
+
+**Фильтр по категории «Клавиатуры»**
+
+![Фильтр по категории «Клавиатуры»](docs/screenshots/03-filter-keyboards.png)
+
+**Фильтр: «Аксессуары» + «Только в наличии»**
+
+![Фильтр: «Аксессуары» + «Только в наличии»](docs/screenshots/04-filter-accessories-in-stock.png)
+
+**Классы против class_requirements.csv: 23 из 23 (Reflection)**
+
+![Классы против class_requirements.csv: 23 из 23 (Reflection)](docs/screenshots/05-class-requirements.png)
+
+**Некорректный конструктор → InvalidArgumentException**
+
+![Некорректный конструктор → InvalidArgumentException](docs/screenshots/06-constructor-validation.png)
+
+**Ошибочное состояние: нет products.json**
+
+![Ошибочное состояние: нет products.json](docs/screenshots/07-error-missing-products.png)
