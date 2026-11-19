@@ -1,5 +1,5 @@
 <?php
-/** @var string $title @var string $page @var string $content */
+/** @var string $title @var string $page @var string $content @var ?array $flash */
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -17,6 +17,9 @@
   </nav>
 </header>
 <main>
+<?php if ($flash !== null): ?>
+  <div class="alert <?= $flash['type'] === 'ok' ? 'ok' : 'error' ?>" role="status"><?= e($flash['text']) ?></div>
+<?php endif; ?>
 <?= $content ?>
 </main>
 </body>

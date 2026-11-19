@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/notes.php';
+require_once __DIR__ . '/session.php';
 
 /**
  * Подготовка данных страницы «Заметки». Вызывается ДО подключения шаблона:
@@ -9,9 +10,11 @@ require_once __DIR__ . '/notes.php';
  */
 function buildNotesPage(): array
 {
+    $form = pullForm('note'); // значения и ошибки формы после неудачного POST
+    $base = ['form' => $form['values'], 'formErrors' => $form['errors'], 'csrf' => csrfToken()];
     try {
-        return ['notes' => loadNotes(), 'error' => null];
+        return ['notes' => loadNotes(), 'error' => null] + $base;
     } catch (StorageException $ex) {
-        return ['notes' => [], 'error' => $ex->getMessage()];
+        return ['notes' => [], 'error' => $ex->getMessage()] + $base;
     }
 }

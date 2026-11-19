@@ -41,3 +41,47 @@ function loadJson(string $path): array
     }
     return $data;
 }
+
+/**
+ * Сохранение массива в JSON-файл. Запись атомарная: сначала во временный файл
+ * в том же каталоге, затем rename — читатель никогда не увидит наполовину записанный файл.
+ *
+ * @throws StorageException
+ */
+function saveJson(string $path, array $data): void
+{
+    $name = basename($path);
+    try {
+        $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+    } catch (JsonException $ex) {
+        throw new StorageException("Не удалось закодировать данные для «{$name}»: " . $ex->getMessage());
+    }
+    $tmp = $path . '.' . bin2hex(random_bytes(4)) . '.tmp';
+    if (@file_put_contents($tmp, $json . "\n", LOCK_EX) === false) {
+        throw new StorageException("Не удалось записать файл «{$name}»: проверьте права на каталог data/.");
+    }
+    if (!@rename($tmp, $path)) {
+        @unlink($tmp);
+        throw new StorageException("Не удалось обновить файл «{$name}».");
+    }
+}
+
+/**
+ * Выполняет $operation под эксклюзивной блокировкой файла данных, чтобы два одновременных
+ * запроса не потеряли записи друг друга (цикл «прочитать → изменить → записать»).
+ *
+ * @throws StorageException
+ */
+function withFileLock(string $path, callable $operation): mixed
+{
+    $lock = @fopen($path . '.lock', 'c');
+    if ($lock === false || !flock($lock, LOCK_EX)) {
+        throw new StorageException('Не удалось заблокировать хранилище для записи: проверьте права на каталог data/.');
+    }
+    try {
+        return $operation();
+    } finally {
+        flock($lock, LOCK_UN);
+        fclose($lock);
+    }
+}
