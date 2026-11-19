@@ -1,0 +1,62 @@
+[
+  {
+    "id": "guest-default",
+    "title": "Первое открытие сайта",
+    "steps": [{"action": "init"}],
+    "expect": {"display_name": "Гость", "user_id": null, "theme": "light", "favorites": []},
+    "manual_check": "Откройте сайт в новой вкладке или приватном окне: в шапке должно быть «Гость», тема светлая."
+  },
+  {
+    "id": "login-anna",
+    "title": "Вход пользователя и применение его темы из users.json",
+    "steps": [{"action": "login", "params": {"user_id": 2}}],
+    "expect": {"display_name": "Анна Смирнова", "user_id": 2, "theme": "dark"},
+    "manual_check": "Нажмите «Войти как Анна Смирнова». В обычной вкладке имя сохранится после перезагрузки; в приватном окне оно останется «Гость»: у приватного окна своя cookie PHPSESSID и своя сессия."
+  },
+  {
+    "id": "login-then-clear",
+    "title": "Вход, затем очистка выбранного имени",
+    "steps": [{"action": "login", "params": {"user_id": 1}}, {"action": "clear_name"}],
+    "expect": {"display_name": "Гость", "user_id": null, "theme": "light"},
+    "manual_check": "После «Очистить» имя в шапке снова «Гость». Тема при этом не сбрасывается — это отдельное значение сессии."
+  },
+  {
+    "id": "theme-switch",
+    "title": "Переключение режима интерфейса",
+    "steps": [{"action": "set_theme", "params": {"theme": "dark"}}],
+    "expect": {"theme": "dark", "display_name": "Гость"},
+    "manual_check": "Включите тёмную тему, обновите страницу (F5) — тема сохраняется. Закройте браузер полностью — cookie сессии исчезнет, тема сбросится."
+  },
+  {
+    "id": "favorites-toggle",
+    "title": "Добавление и удаление избранных заметок",
+    "steps": [
+      {"action": "toggle_favorite", "params": {"note_id": 1}},
+      {"action": "toggle_favorite", "params": {"note_id": 3}},
+      {"action": "toggle_favorite", "params": {"note_id": 1}}
+    ],
+    "expect": {"favorites": [3]},
+    "manual_check": "Отметьте заметки 1 и 3, затем снимите отметку с 1. В сессии остаётся только id 3. В другой вкладке того же браузера избранное общее (одна cookie), в приватном окне — своё."
+  },
+  {
+    "id": "unknown-user",
+    "title": "Вход несуществующего пользователя (ошибочный сценарий)",
+    "steps": [{"action": "login", "params": {"user_id": 99}, "expect_error": true}],
+    "expect": {"display_name": "Гость", "user_id": null},
+    "manual_check": "Отправьте форму входа с user_id=99 (через DevTools). Должно появиться сообщение «Пользователь не найден», имя остаётся «Гость»."
+  },
+  {
+    "id": "invalid-theme",
+    "title": "Недопустимый режим интерфейса (ошибочный сценарий)",
+    "steps": [{"action": "set_theme", "params": {"theme": "neon"}, "expect_error": true}],
+    "expect": {"theme": "light"},
+    "manual_check": "Значение neon не принимается: тема остаётся прежней, пользователь видит сообщение."
+  },
+  {
+    "id": "unknown-note-favorite",
+    "title": "Избранное для несуществующей заметки (ошибочный сценарий)",
+    "steps": [{"action": "toggle_favorite", "params": {"note_id": 777}, "expect_error": true}],
+    "expect": {"favorites": []},
+    "manual_check": "Несуществующий id в избранное не попадает."
+  }
+]
