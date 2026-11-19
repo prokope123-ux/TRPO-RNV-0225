@@ -1,0 +1,6 @@
+[
+  {"id": 1, "login": "ivanov",    "display_name": "Пётр Иванов",      "role": "student", "theme": "light"},
+  {"id": 2, "login": "smirnova",  "display_name": "Анна Смирнова",    "role": "student", "theme": "dark"},
+  {"id": 3, "login": "popova",    "display_name": "Мария Попова",     "role": "editor",  "theme": "light"},
+  {"id": 4, "login": "makievsky", "display_name": "Станислав Макиевский", "role": "teacher", "theme": "dark"}
+]
