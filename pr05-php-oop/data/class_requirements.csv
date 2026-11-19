@@ -1,0 +1,24 @@
+class,member,kind,type,required,description
+Product,id,property,int,yes,Устойчивый идентификатор товара
+Product,name,property,string,yes,Название для отображения
+Product,price,property,float,yes,Базовая цена в рублях (не меньше нуля)
+Product,categoryId,property,int,yes,Ссылка на Category по идентификатору
+Product,sku,property,string,yes,Артикул
+Product,stock,property,int,yes,Остаток на складе (не меньше нуля)
+Product,description,property,?string,no,Необязательное описание
+Product,discountPercent,property,?int,no,Необязательная скидка 0–90%
+Product,finalPrice,method,float,yes,Цена с учётом скидки
+Product,hasDiscount,method,bool,yes,Есть ли скидка
+Product,isInStock,method,bool,yes,Есть ли товар на складе
+Product,isLowStock,method,bool,yes,Остаток меньше порога
+Product,shortDescription,method,string,yes,Описание длиной не более N символов
+Category,id,property,int,yes,Идентификатор категории
+Category,name,property,string,yes,Название категории
+Category,slug,property,string,yes,Короткий код для URL
+Category,label,method,string,yes,Название для интерфейса
+CatalogService,products,method,array,yes,Все корректные товары
+CatalogService,categories,method,array,yes,Все категории
+CatalogService,filterByCategory,method,array,yes,Фильтр товаров по категории
+CatalogService,averagePrice,method,float,yes,Средняя итоговая цена набора товаров
+CatalogService,categoryOf,method,?Category,yes,Категория товара
+CatalogService,loadErrors,method,array,yes,Сообщения о пропущенных строках

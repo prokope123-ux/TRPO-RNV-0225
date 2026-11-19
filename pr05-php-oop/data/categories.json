@@ -1,0 +1,7 @@
+[
+  {"id": 1, "name": "Клавиатуры", "slug": "keyboards"},
+  {"id": 2, "name": "Мыши", "slug": "mice"},
+  {"id": 3, "name": "Мониторы", "slug": "monitors"},
+  {"id": 4, "name": "Аксессуары", "slug": "accessories"},
+  {"id": 5, "name": "Наушники", "slug": "headphones"}
+]
