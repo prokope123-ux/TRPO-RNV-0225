@@ -77,3 +77,5 @@ body[data-theme="dark"] button.secondary, body[data-theme="dark"] .btn.secondary
 .fav.on { color: #f5a623; }
 pre { background: #11172b; color: #dbe2ff; padding: 14px; border-radius: 12px; overflow: auto; font-size: 13px; }
 .step { font-size: 14px; color: var(--muted); margin: 2px 0; }
+body[data-theme="dark"] .fav { background: none; color: #7f88a8; }
+body[data-theme="dark"] .fav.on { color: #f5a623; }
