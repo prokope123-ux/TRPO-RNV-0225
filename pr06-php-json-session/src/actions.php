@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/notes.php';
 require_once __DIR__ . '/session.php';
+require_once __DIR__ . '/state.php';
 
 /** Безопасно читает строковое поле POST (массивы и отсутствующие поля дают пустую строку). */
 function postString(string $key): string
@@ -41,13 +42,39 @@ function handlePostRequest(array $allowedPages): never
                 redirectTo('notes', '#add');
             }
             try {
-                $id = addNote($result['values']['title'], $result['values']['body'], $result['tags'], 'Гость');
+                $id = addNote($result['values']['title'], $result['values']['body'], $result['tags'], $_SESSION['state']['display_name']);
                 flash('ok', "Заметка №{$id} добавлена.");
             } catch (StorageException $ex) {
                 rememberForm('note', $result['values'], []);
                 flash('error', $ex->getMessage());
             }
             redirectTo('notes', '#notes');
+
+        case 'login':
+        case 'clear_name':
+        case 'set_theme':
+        case 'toggle_favorite':
+            $action = postString('action');
+            $params = ['user_id' => postString('user_id'), 'theme' => postString('theme'), 'note_id' => postString('note_id')];
+            try {
+                $error = applyAction($_SESSION['state'], $action, $params, stateContext());
+            } catch (StorageException $ex) {
+                $error = $ex->getMessage();
+            }
+            if ($error !== null) {
+                flash('error', $error);
+            } else {
+                if ($action === 'login') {
+                    session_regenerate_id(true); // после входа выдаём новый идентификатор сессии
+                }
+                flash('ok', [
+                    'login'           => 'Вы вошли как ' . $_SESSION['state']['display_name'] . '.',
+                    'clear_name'      => 'Имя очищено, вы снова «Гость».',
+                    'set_theme'       => 'Режим интерфейса: ' . ($_SESSION['state']['theme'] === 'dark' ? 'тёмный' : 'светлый') . '.',
+                    'toggle_favorite' => 'Избранное обновлено.',
+                ][$action]);
+            }
+            redirectTo($return);
 
         default:
             flash('error', 'Неизвестное действие.');

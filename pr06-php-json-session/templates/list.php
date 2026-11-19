@@ -1,8 +1,9 @@
 <?php
-/** @var array $notes @var ?string $error @var array $form @var array $formErrors @var string $csrf */
+/** @var array $notes @var ?string $error @var array $form @var array $formErrors @var string $csrf @var array $favorites @var string $author */
 ?>
 <section class="card" id="add">
   <h2>Новая заметка</h2>
+  <p class="muted">Автор будет подставлен из session: <strong><?= e($author) ?></strong>.</p>
   <form method="post" action="<?= e(url('notes')) ?>" novalidate>
     <input type="hidden" name="action" value="add_note">
     <input type="hidden" name="return" value="notes">
@@ -27,7 +28,7 @@
 </section>
 
 <section class="card" id="notes">
-  <h2>Заметки</h2>
+  <h2>Заметки <span class="muted">· избранных в этой сессии: <?= count($favorites) ?></span></h2>
   <?php if ($error !== null): ?>
     <div class="alert error"><strong>Не удалось загрузить заметки.</strong> <?= e($error) ?> Проверьте файл <code>data/notes.json</code>.</div>
   <?php elseif ($notes === []): ?>
@@ -35,7 +36,16 @@
   <?php else: ?>
     <?php foreach ($notes as $note): ?>
       <article class="note">
-        <h3><?= e($note['title']) ?></h3>
+        <?php $isFav = in_array($note['id'], $favorites, true); ?>
+        <h3>
+          <form method="post" action="<?= e(url('notes')) ?>" style="display:inline">
+            <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
+            <input type="hidden" name="return" value="notes">
+            <input type="hidden" name="note_id" value="<?= $note['id'] ?>">
+            <button type="submit" name="action" value="toggle_favorite" class="fav <?= $isFav ? 'on' : '' ?>" title="<?= $isFav ? 'Убрать из избранного' : 'В избранное' ?>"><?= $isFav ? '★' : '☆' ?></button>
+          </form>
+          <?= e($note['title']) ?>
+        </h3>
         <div class="meta"><?= e($note['author']) ?> · <?= e($note['created_at']) ?></div>
         <p><?= nl2br(e($note['body'])) ?></p>
         <div>
